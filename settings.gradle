@@ -1,2 +1,5 @@
+//管理根项目和子项目，每个子项目的build--配置子项目的个性化需求
 rootProject.name = 'todo'
+include 'web'
+include 'repository'
 

@@ -1,30 +1,50 @@
 group 'io.ganguo.gradle'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
+
 apply plugin: 'war' //官网API
 
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-}
-
-//自定义任务-自动创建目录
-def createDir={
-    path ->
-        File dir=new File(path)
-        if(!dir.exists()){
-            dir.mkdirs();
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.8
+    //发布
+    //第一步，配置maven插件
+    apply plugin: 'maven-publish'
+    //第二步，配置要发布的内容和仓库地址
+    publishing{
+        publications{
+            myPublish(MavenPublication){
+                from components.java
+            }
         }
-}
-task makeJavaDir() {
-    def paths=['src/main/java','src/main/resources','src/test/java','src/test/resources'];
-    doFirst{
-        paths.forEach(createDir);
+        repositories{
+            maven{
+                name "myRepo"
+                url ""
+            }
+        }
     }
+    //第三步，执行发布任务--todo-task-publishing-publish
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+
 }
+//自定义任务-自动创建目录
+//def createDir={
+//    path ->
+//        File dir=new File(path)
+//        if(!dir.exists()){
+//            dir.mkdirs();
+//        }
+//}
+//task makeJavaDir() {
+//    def paths=['src/main/java','src/main/resources','src/test/java','src/test/resources'];
+//    doFirst{
+//        paths.forEach(createDir);
+//    }
+//}
